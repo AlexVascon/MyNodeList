@@ -19,6 +19,14 @@ public class Main {
         System.out.println(myList.delete("Book"));
         System.out.println();
         myList.print();
+        System.out.println();
+        myList.remove();
+        myList.remove();
+        myList.remove();
+        myList.remove();
+        myList.remove();
+        myList.remove();
+        myList.print();
 
     }
 }

@@ -198,6 +198,15 @@ public class MyNodeList<T> {
         return current.data();
     }
 
+    public void remove() {
+        if(head != null && head.next() == null) {
+            head = null;
+        }
+        if(head != null) {
+            head = head.next();
+        }
+    }
+
     public MyIterator<T> myIterator() {
         MyNodeList<T> copy = new MyNodeList<>();
         while(head != null) {
@@ -215,7 +224,9 @@ public class MyNodeList<T> {
     }
 
     public void print() {
-        // recursion in print() prints all nodes data
+        if(head == null) {
+            throw new NullPointerException("List is empty");
+        }
         head.print();
     }
 }

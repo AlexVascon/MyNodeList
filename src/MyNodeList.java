@@ -54,6 +54,13 @@ public class MyNodeList<T> {
         return count;
     }
 
+    public void addFirst(T value) {
+        ListNode<T> firstNode = new ListNode<>(value);
+        ListNode<T> temp = head;
+        head = firstNode;
+        firstNode.setNext(temp);
+    }
+
     public ListNode<T> next() {
         if(next == null) {
             // initialises next reference

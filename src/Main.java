@@ -5,7 +5,7 @@ public class Main {
         myList.insert("Cake");
         myList.insert("Book");
         myList.insert("Sand");
-        System.out.println(myList.indexOf("Sand"));
-        System.out.println(myList.indexOf("Cake"));
+        myList.addFirst("First");
+        myList.print();
     }
 }

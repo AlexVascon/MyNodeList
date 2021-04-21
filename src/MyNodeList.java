@@ -25,6 +25,13 @@ public class MyNodeList<T> {
         }
     }
 
+    public MyNodeList<T> clone() {
+        if(head != null) {
+            return this;
+        }
+        return null;
+    }
+
     public Boolean isEmpty() {
         if(head == null) {
             // if head is empty then there are no values

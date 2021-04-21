@@ -15,8 +15,10 @@ public class Main {
         myList.addAll(secondList);
         myList.insert("Carrot");
 
-        myList.print();
+        System.out.println(myList.delete("Cheese"));
+        System.out.println(myList.delete("Book"));
         System.out.println();
-        System.out.println(myList.getLast());
+        myList.print();
+
     }
 }

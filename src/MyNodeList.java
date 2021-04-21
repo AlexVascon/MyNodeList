@@ -172,6 +172,32 @@ public class MyNodeList<T> {
         return current;
     }
 
+    public T delete(T value) {
+       if(head == null) {
+           return null;
+       }
+       ListNode<T> current = head;
+       ListNode<T> previous = null;
+       int count = 0;
+       while(count < size) {
+           if(current.data() == value) {
+               break;
+           }
+           previous = current;
+           current = current.next();
+           count++;
+       }
+       // temporarily holds the previous value of the removed node
+       ListNode<T> temp = previous;
+       // attaches the next node of the removed node to temp. Maintaining the chain
+       temp.setNext(current.next());
+       // disconnects removed node from the rest of its chain
+        // current node is not attached to anything but this way we can still return its value
+       current.setNext(null);
+       // return removed node
+        return current.data();
+    }
+
     public MyIterator<T> myIterator() {
         MyNodeList<T> copy = new MyNodeList<>();
         while(head != null) {

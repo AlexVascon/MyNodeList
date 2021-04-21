@@ -32,6 +32,19 @@ public class MyNodeList<T> {
         return null;
     }
 
+    public T get(int index) {
+        if(index > size || head == null) {
+            return null;
+        }
+        int count = 0;
+        ListNode<T> dummyHead = head;
+        while(count < index) {
+            dummyHead = dummyHead.next();
+            count++;
+        }
+        return dummyHead.data();
+    }
+
     public Boolean isEmpty() {
         if(head == null) {
             // if head is empty then there are no values

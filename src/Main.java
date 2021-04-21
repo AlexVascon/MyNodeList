@@ -14,10 +14,6 @@ public class Main {
 
         myList.addAll(secondList);
 
-        myList.print();
-
-        MyNodeList<String> clone = myList.clone();
-        System.out.println();
-        clone.print();
+        System.out.println(myList.get(0));
     }
 }

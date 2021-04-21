@@ -20,12 +20,7 @@ public class Main {
         System.out.println();
         myList.print();
         System.out.println();
-        myList.remove();
-        myList.remove();
-        myList.remove();
-        myList.remove();
-        myList.remove();
-        myList.remove();
+        System.out.println(myList.pop());
         myList.print();
 
     }

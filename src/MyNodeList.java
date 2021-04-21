@@ -156,6 +156,27 @@ public class MyNodeList<T> {
         return null;
     }
 
+    public T pop() {
+        if(head == null) {
+            throw new NullPointerException("List is empty");
+        }
+        ListNode<T> current = head;
+        ListNode<T> previous = null;
+        // list starts at 0 so count starts at 1
+        int count = 1;
+        while(count < (size -1)) {
+            previous = current;
+            current = current.next();
+            count++;
+        }
+        // set second to last node
+        ListNode<T> toReturn = previous;
+        // remove last nodes
+        toReturn.setNext(null);
+        // return last node that was removed
+        return current.data();
+    }
+
     public ListNode<T> delete(int position) {
         // sets current node
         ListNode<T> previous = head;

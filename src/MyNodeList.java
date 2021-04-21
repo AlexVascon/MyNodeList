@@ -44,6 +44,16 @@ public class MyNodeList<T> {
         size++;
     }
 
+    public int indexOf(T value) {
+        ListNode<T> dummyHead = head;
+        int count = 0;
+        while(dummyHead.data() != value) {
+            count++;
+            dummyHead = dummyHead.next();
+        }
+        return count;
+    }
+
     public ListNode<T> next() {
         if(next == null) {
             // initialises next reference

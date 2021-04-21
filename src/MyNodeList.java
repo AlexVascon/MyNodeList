@@ -53,6 +53,25 @@ public class MyNodeList<T> {
         return false;
     }
 
+    public T getFirst() {
+        if(head != null) {
+            return head.data();
+        }
+        return null;
+    }
+
+    public T getLast() {
+        if(head != null) {
+            next = head;
+        }
+        ListNode<T> current = next;
+        while(next != null) {
+            current = next;
+            next = next.next();
+        }
+        return current.data();
+    }
+
     public void clear() {
         head = null;
     }

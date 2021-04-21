@@ -13,7 +13,10 @@ public class Main {
         myList.insert("Bacon");
 
         myList.addAll(secondList);
+        myList.insert("Carrot");
 
-        System.out.println(myList.get(0));
+        myList.print();
+        System.out.println();
+        System.out.println(myList.getLast());
     }
 }

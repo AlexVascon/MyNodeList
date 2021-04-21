@@ -28,7 +28,20 @@ public class MyNodeList<T> {
     }
 
     public void insert(int index, T value) {
-
+        ListNode<T> dummyHead = head;
+        ListNode<T> previous = null;
+        int position = 0;
+        while(position < index) {
+            previous = dummyHead;
+            dummyHead = dummyHead.next();
+            position++;
+        }
+        ListNode<T> current = previous;
+        ListNode<T> attached = current.next();
+        ListNode<T> newNode = new ListNode<>(value);
+        current.setNext(newNode);
+        newNode.setNext(attached);
+        size++;
     }
 
     public ListNode<T> next() {

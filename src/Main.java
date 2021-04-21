@@ -6,6 +6,14 @@ public class Main {
         myList.insert("Book");
         myList.insert("Sand");
         myList.addFirst("First");
+
+        MyNodeList<String> secondList = new MyNodeList<>();
+        myList.insert("Cheese");
+        myList.insert("Crackers");
+        myList.insert("Bacon");
+
+        myList.addAll(secondList);
+
         myList.print();
     }
 }

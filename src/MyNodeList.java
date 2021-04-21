@@ -15,6 +15,16 @@ public class MyNodeList<T> {
         }
     }
 
+    public void insert(ListNode<T> listNode) {
+        if(head == null) {
+            head = listNode;
+            size ++;
+        } else {
+            head.insert(listNode);
+            size++;
+        }
+    }
+
     public Boolean isEmpty() {
         if(head == null) {
             // if head is empty then there are no values
@@ -59,6 +69,12 @@ public class MyNodeList<T> {
         ListNode<T> temp = head;
         head = firstNode;
         firstNode.setNext(temp);
+    }
+
+    public void addAll(MyNodeList<T> list) {
+        if(head != null) {
+            head.insert(list.head);
+        }
     }
 
     public ListNode<T> next() {

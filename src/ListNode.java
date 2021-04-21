@@ -19,6 +19,16 @@ public class ListNode<T> {
         }
     }
 
+    public void insert(ListNode<T> listNode) {
+        if(next == null) {
+            // defines attached node
+            next = listNode;
+        } else {
+            // recursion. Adds data to the next node;
+            next.insert(listNode);
+        }
+    }
+
     public T data() {
         return data;
     }

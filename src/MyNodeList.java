@@ -1,33 +1,37 @@
+import java.util.NoSuchElementException;
+
 public class MyNodeList<T> {
     private ListNode<T> head;
     private ListNode<T> next;
+    private ListNode<T> previous;
     private int size;
 
-    public void insert(T value) {
+    public void insert(T value) { // create new node
         if(head == null) {
-            // head is set as start of linked list
-            head = new ListNode<>(value);
-            size = 1;
+            head = new ListNode<>(value); // start
+            next = head; // avoid null problems conditioning next
         } else {
-            // recursion. Elements added to list
-            head.insert(value);
-            size++;
+            head.insert(value); // recursion. Elements added to list. Check ListNode class for insert()
         }
+        size++;
     }
 
-    public void insert(ListNode<T> listNode) {
+    public void insert(ListNode<T> listNode) { // adds an existing node
         if(head == null) {
             head = listNode;
-            size ++;
+            next = head;
         } else {
-            head.insert(listNode);
-            size++;
+            head.insert(listNode); // recursion. Same principle as above
         }
+        size ++;
     }
 
-    public MyNodeList<T> clone() {
+    public MyNodeList<T> clone() { // return list as copy. Changes over lap because it contains the same reference
         if(head != null) {
-            return this;
+            MyNodeList<T> copy = new MyNodeList<>();
+            copy.insert(head);
+            copy.size = this.size;
+            return copy;
         }
         return null;
     }
@@ -46,8 +50,7 @@ public class MyNodeList<T> {
     }
 
     public Boolean isEmpty() {
-        if(head == null) {
-            // if head is empty then there are no values
+        if(head == null) { // if head is empty then there are no values
             return true;
         }
         return false;
@@ -62,38 +65,54 @@ public class MyNodeList<T> {
 
     public T getLast() {
         if(head != null) {
-            next = head;
+            ListNode<T> current = head;
+            ListNode<T> nextNode = head.next();
+            while(nextNode != null) {
+                current = nextNode;
+                nextNode = nextNode.next();
+            }
+            return current.data(); // last element that was not null
         }
-        ListNode<T> current = next;
-        while(next != null) {
-            current = next;
-            next = next.next();
-        }
-        return current.data();
+        return null;
     }
 
     public void clear() {
-        head = null;
+        head = null; // empty list
     }
 
-    public void insert(int index, T value) {
-        ListNode<T> dummyHead = head;
-        ListNode<T> previous = null;
+    public void insert(int index, T value) { // add node at specific position in list
+        if(size == 0 && index > size) {
+            return;
+        }
+        if(head == null && index == size) {
+            head = new ListNode<>(value);
+            size++;
+            return;
+        }
+        if(index > size + 1) {
+            return;
+            //throw new IllegalArgumentException("index is out of bounds for size of LinkedList");
+        }
+        ListNode<T> dummyHead = head; // current node
+        ListNode<T> previous = null; // node current is attached from
         int position = 0;
         while(position < index) {
             previous = dummyHead;
             dummyHead = dummyHead.next();
             position++;
         }
-        ListNode<T> current = previous;
-        ListNode<T> attached = current.next();
+        ListNode<T> current = previous; // to be linked to new node
+        ListNode<T> attached = current.next(); // new node will link to this node
         ListNode<T> newNode = new ListNode<>(value);
-        current.setNext(newNode);
-        newNode.setNext(attached);
+        current.setNext(newNode); // squeeze in new node. Current now links to new node
+        newNode.setNext(attached); // links to next existing element in list
         size++;
     }
 
     public int indexOf(T value) {
+        if(head == null) {
+            throw new NullPointerException("List is empty. No values to return");
+        }
         ListNode<T> dummyHead = head;
         int count = 0;
         while(dummyHead.data() != value) {
@@ -104,6 +123,10 @@ public class MyNodeList<T> {
     }
 
     public void addFirst(T value) {
+        if(head == null) {
+            head = new ListNode<>(value);
+            return;
+        }
         ListNode<T> firstNode = new ListNode<>(value);
         ListNode<T> temp = head;
         head = firstNode;
@@ -117,85 +140,108 @@ public class MyNodeList<T> {
     }
 
     public ListNode<T> next() {
-        if(next == null) {
-            // initialises next reference
-            next = head;
+        if(head == null) {
+            return null;
         }
-        // moves to the next node
-        next = next.next();
-        return next;
+        if(size == 1) {
+            return null;
+        }
+       try {
+           next = next.next();
+           return next;
+       } catch (NullPointerException e) {
+           e.printStackTrace();
+           return null;
+       }
+    }
+
+    public int size() { // length of list
+        return size;
     }
 
     public boolean contains(T value) {
         if(head != null ) {
-            return  head.contains(value);
+            return  head.contains(value); // Recursion
         }
         return false;
     }
 
     public ListNode<T> get(T value) {
         if(head!=null) {
-            return head.get(value);
+            return head.get(value); // Recursion
         }
         return null;
     }
 
     public ListNode<T> getNext() {
-        // return next without moving to it
-        if(next == null) {
-            next = head;
+        if(head == null || next == null) {
+            return null;
+            //throw new NullPointerException("List is empty or only one node present");
         }
         return next;
     }
 
-    public ListNode<T> head() {
+    public ListNode<T> head() { // return the start of the list
         if(head != null) {
-            // return the start of the list
             return head;
         }
         return null;
     }
 
-    public T pop() {
+    public T pop() { // delete last element in stack and return its value
         if(head == null) {
-            throw new NullPointerException("List is empty");
+            return null;
+            //throw new NullPointerException("List is empty");
         }
-        ListNode<T> current = head;
+        if(head.next() == null) {
+            ListNode<T> temp = head;
+            head = null;
+            return temp.data();
+        }
+        ListNode<T> current = null;
+        ListNode<T> dummyHead = head;
         ListNode<T> previous = null;
-        // list starts at 0 so count starts at 1
-        int count = 1;
-        while(count < (size -1)) {
-            previous = current;
-            current = current.next();
-            count++;
+        while(dummyHead != null) {
+            previous = current; // set last element to null and become last element
+            current = dummyHead; // to be set to null (last non null element)
+            dummyHead = dummyHead.next(); // first full element
         }
-        // set second to last node
-        ListNode<T> toReturn = previous;
-        // remove last nodes
-        toReturn.setNext(null);
-        // return last node that was removed
-        return current.data();
+        previous.setNext(null);
+        return current.data(); // return removed data
     }
 
     public ListNode<T> delete(int position) {
-        // sets current node
+        if(position > size) {
+            throw new NullPointerException("position is out of bounds");
+        }
+        if(head == null) {
+            throw new NullPointerException("List is empty");
+        }
         ListNode<T> previous = head;
         int count = 0;
-        // list starts from 0
         while(count < position -1) {
             previous = previous.next();
             count++;
         }
         ListNode<T> current = previous.next();
-        previous.setNext(current.next());
-        current.setNext(null);
+        previous.setNext(current.next()); // previous points to currents next node, bypassing current
+        current.setNext(null); // avoid duplication problems
         size--;
         return current;
     }
 
+    public void resetNext() {
+        next = head;
+    }
+
     public T delete(T value) {
        if(head == null) {
-           return null;
+           throw new NullPointerException("List is empty. No nodes to remove");
+       }
+       if(head.data() == value) {
+           ListNode<T> temp = head;
+           head = head.next();
+           return temp.data();
        }
        ListNode<T> current = head;
        ListNode<T> previous = null;
@@ -208,39 +254,39 @@ public class MyNodeList<T> {
            current = current.next();
            count++;
        }
-       // temporarily holds the previous value of the removed node
-       ListNode<T> temp = previous;
-       // attaches the next node of the removed node to temp. Maintaining the chain
-       temp.setNext(current.next());
-       // disconnects removed node from the rest of its chain
-        // current node is not attached to anything but this way we can still return its value
-       current.setNext(null);
-       // return removed node
+       if(count == size) {
+           throw new NoSuchElementException("List does not contain value");
+       }
+       ListNode<T> temp = previous; // holds the previous value of the removed node
+       temp.setNext(current.next()); // attaches next node of removed node to temp. Maintaining the chain
+       current.setNext(null); // avoid duplicate problems
         return current.data();
     }
 
-    public void remove() {
-        if(head != null && head.next() == null) {
-            head = null;
+    public void remove() { // removes element at bottom of the stack
+        if(head == null) {
+            throw new NullPointerException("List is empty");
         }
-        if(head != null) {
+        if(head.next() == null) {
+            head = null;
+        } else {
             head = head.next();
         }
+        size--;
     }
 
     public MyIterator<T> myIterator() {
-        MyNodeList<T> copy = new MyNodeList<>();
-        while(head != null) {
-            // head is set to start of copied list
-            copy.insert(head.data());
-            // traverse the lists values
-            head = head.next();
+        if(head == null) {
+            throw new NullPointerException("No elements to traverse in list");
         }
-
-        // create new my iterator
+        MyNodeList<T> copy = new MyNodeList<>(); // avoid referencing problem
+        ListNode<T> dummyHead = head;
+        while(dummyHead != null) {
+            copy.insert(dummyHead.data());
+            dummyHead = dummyHead.next();
+        }
         MyIterator<T> myIterator = new MyIterator<>();
-        // add the copied list to my iterator
-        myIterator.setMyNodeList(copy);
+        myIterator.setMyNodeList(copy); // add the copied list to my iterator
         return myIterator;
     }
 

@@ -6,26 +6,21 @@ public class ListNode<T> {
         this.data = data;
     }
 
-    // recursion: each node contains a node called next. If that nodes next node has no value, then it is created.
-    // Otherwise the node next calls this method on itself and the process is repeated.
-    // This is the structure for how a linked list is implemented
+    // recursion: each node contains a node called next. If next has no value, then new data is inserted here.
+    // Otherwise next calls this method on itself and the process is repeated.
     public void insert(T value) {
         if(next == null) {
-            // defines attached node
             next = new ListNode<>(value);
         } else {
-            // recursion. Adds data to the next node;
-            next.insert(value);
+            next.insert(value); // recursion. Adds data to the next node
         }
     }
 
     public void insert(ListNode<T> listNode) {
         if(next == null) {
-            // defines attached node
             next = listNode;
         } else {
-            // recursion. Adds data to the next node;
-            next.insert(listNode);
+            next.insert(listNode); // recursion
         }
     }
 
@@ -41,20 +36,18 @@ public class ListNode<T> {
         this.next = next;
     }
 
-    // reverses ListNode order
-    public ListNode<T> reverse(ListNode<T> head) {
+    public ListNode<T> reverse(ListNode<T> head) { // reverses ListNode order
         if(head == null) {
-            return head;
+            return null;
         }
         ListNode<T> current = head;
         ListNode<T> previous = null;
-        ListNode<T> next = null;
+        ListNode<T> nextNode = null;
         while(current != null) {
-            //
-            next = current.next;
+            nextNode = current.next;
             current.next = previous;
             previous = current;
-            current = next;
+            current = nextNode;
         }
         return previous;
     }
@@ -75,8 +68,7 @@ public class ListNode<T> {
             return true;
         }
         if(next != null) {
-            // recursion. Checks the next nodes data.
-            return next.contains(value);
+            return next.contains(value); // recursion. Checks the next nodes data.
         }
         return false;
     }
@@ -86,13 +78,12 @@ public class ListNode<T> {
             return this;
         }
         if(next != null) {
-            // recursion. checks the next nodes data.
-            return next.get(value);
+            return next.get(value); // recursion. checks the next nodes data.
         }
         return null;
     }
 
-    public String toString() {
+    public String toString() { // print node data
         return data + "";
     }
 }

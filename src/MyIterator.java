@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class MyIterator<T> {
     private MyNodeList<T> myNodeList;
     private ListNode<T> next;
@@ -5,31 +7,106 @@ public class MyIterator<T> {
     private boolean start = false;
     private ListNode<T> previous;
     private boolean end = false;
+    private Scanner scanner = new Scanner(System.in);
 
+    public static void main(String[] args) {
+        MyNodeList<String> list = new MyNodeList<>();
+        list.insert("Earth");
+        list.insert("Wind");
+        list.insert("Fire");
+        list.insert("Water");
+        MyIterator<String> iterator = list.myIterator();
+        iterator.traverse();
+    }
+
+    // set up involves a default constructor
+    // A linkedList method creates and returns an iterator
+    // .setMyNodeList(add list head)  is called within the method
+    // iterator now contains an instance of LinkedList
     public void setMyNodeList(MyNodeList<T> myNodeList) {
-        // add existing node list with values
         this.myNodeList = myNodeList;
+        next = myNodeList.head();
     }
 
-    public ListNode<T> next() {
-        if(next == null) {
-            // initialise next
-            next = myNodeList.next();
-        } else {
-            // move to next node
-            next = next.next();
+    // it works, next, previous, delete
+    public void traverse() {
+        while(hasNext()) {
+            System.out.println("Current element: " + next);
+            System.out.println("[1] forward");
+            System.out.println("[2] backward");
+            System.out.println("[3] delete");
+            System.out.println("[4] list values");
+            int choice = Integer.parseInt(scanner.nextLine());
+            if(choice == 1) {
+                next();
+            }
+            if(choice == 2) {
+                previous();
+            }
+            if(choice == 3) {
+                delete();
+            }
+            if(choice == 4) {
+                print();
+            }
         }
-        return next;
     }
 
+    // restart next position in list back to start
+    public void resetNext() {
+        next = myNodeList.head();
+    }
+
+    // move to next element in list
+    public ListNode<T> next() {
+        if(next != null) {
+            previous = next;
+            next = next.next();
+            return next;
+        }
+        return null;
+    }
+
+    // delete current next element
+    public ListNode<T> delete() {
+        ListNode<T> temp = next;
+        ListNode<T> nextNode = next;
+        nextNode = nextNode.next();
+        if(nextNode == null && next != null) {
+            previous();
+            previous.setNext(next);
+            return next;
+        }
+        previous.setNext(nextNode);
+        next = nextNode;
+        return temp;
+    }
+
+    // return previous without changing any instance states
     public ListNode<T> getPrevious() {
+        if(myNodeList.isEmpty() || previous == null) {
+            throw new NullPointerException("List is empty or at the start of the list");
+        }
         // return previous without moving to previous node
         return previous;
     }
 
+    // return next without changing any instance states
+    public ListNode<T> getNext() {
+        if(next != null) {
+            System.out.println(next);
+            return next;
+        }
+        return null;
+    }
+
+    // sets previous just before next node
     public ListNode<T> previous() {
+        if(myNodeList.isEmpty() || next == null) {
+            throw new NullPointerException("List is empty or only contains 1 node");
+        }
         // create duplicate list
-        // still referenced and effects origional list
+        // still referenced and effects original list
         // used to avoid problems
         dummyHead = myNodeList.head();
         while(dummyHead != null) {
@@ -64,8 +141,8 @@ public class MyIterator<T> {
     public void print() {
         // recursion
         // inception
-        // .print() calls .print() which calls .print() on head node
-        // each node prints its data then moves to the next node
+        // .print() calls .print() in MyNodeList.Class which calls .print() in ListNode.Class on head node
+        // each node prints its data then calls the method on itself.
         myNodeList.print();
     }
 }
